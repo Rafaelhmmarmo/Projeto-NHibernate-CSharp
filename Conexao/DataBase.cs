@@ -21,10 +21,6 @@ namespace ProjetoBaseComBanco.Conexao
                     var cfg = new Configuration()
                         .Configure();
 
-                    //var configuraCfg = ConfiguraCfg.AtualizarConfigurationCfg(cfg);
-
-                    //cfg.Properties = configuraCfg.Properties;
-
                     if (_sessionFactory == null)
                     {
                         var config = Fluently.Configure(cfg);
