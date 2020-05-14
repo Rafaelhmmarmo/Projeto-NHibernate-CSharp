@@ -1,6 +1,6 @@
-﻿using ProjetoBaseComBanco.Conexao;
+﻿using NHibernate;
+using ProjetoBaseComBanco.Conexao;
 using ProjetoBaseComBanco.Data.DataModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +19,7 @@ namespace ProjetoBaseComBanco.Data.Repositories
         public EmpresasData RetornarPorId(int id)
         {
             var session = GetSessionLocal();
-         
+
             var resultado = session
                 .Query<EmpresasData>()
                 .Where(w => w.Id == id)
@@ -29,53 +29,55 @@ namespace ProjetoBaseComBanco.Data.Repositories
             return resultado.FirstOrDefault();
         }
 
+        private EmpresasData RetornarPorId(int id, ISession session)
+        {
+            var resultado = session
+                .Query<EmpresasData>()
+                .Where(w => w.Id == id)
+                .ToList();
+
+            return resultado.FirstOrDefault();
+        }
+
         public bool ExcluirPorId(int id)
         {
-            var retorno = false;
             var session = GetSessionLocal();
-            var xxx = RetornarPorId(id);
+            var objeto = RetornarPorId(id, session);
             var trans = session.BeginTransaction();
 
             try
             {
-                session.Delete(xxx);
+                session.Delete(objeto);
                 trans.Commit();
-                retorno = true;
+                session.Close();
+                return true;
             }
             catch
             {
                 trans.Rollback();
+                session.Close();
+                return false;
             }
-            session.Close();
-            return retorno;
         }
 
-        public EmpresasData Gravar(EmpresasData produto)
+        public bool Gravar(EmpresasData objeto)
         {
             var session = GetSessionLocal();
             var trans = session.BeginTransaction();
 
             try
-            {
-                var existe = RetornarPorId(produto.Id) != null;
-
-                if (existe)
-                {
-                    session.Update(produto);
-                }
-                else
-                {
-                    session.Save(produto, produto.Id);
-                }
+            {            
+                session.Save(objeto);
                 trans.Commit();
-
+                session.Close();
+                return true;
             }
-            catch (Exception)
+            catch
             {
                 trans.Rollback();
+                session.Close();
+                return false;
             }
-            return RetornarPorId(produto.Id);
         }
-
     }
 }

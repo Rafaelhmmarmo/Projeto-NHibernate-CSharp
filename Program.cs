@@ -1,6 +1,7 @@
-﻿using ProjetoBaseComBanco.Conexao;
+﻿using ProjetoBaseComBanco.Data.DataModel;
 using ProjetoBaseComBanco.Data.Repositories;
 using System;
+using System.Linq;
 
 namespace ProjetoBaseComBanco
 {
@@ -9,8 +10,17 @@ namespace ProjetoBaseComBanco
         static void Main(string[] args)
         {
             EmpresaRepository empresas = new EmpresaRepository();
+            EmpresasData NovaEmpresa = new EmpresasData();
 
-            DataBase.GeraSchema();
+            NovaEmpresa.Nome = "Mojang";
+            NovaEmpresa.Pais = "EUA";
+            NovaEmpresa.Ano = 2012;
+
+            empresas.Gravar(NovaEmpresa);
+
+            //DataBase.GeraSchema();
+
+
             
             var geralzao = empresas.RetornarTodas();
 
@@ -18,11 +28,10 @@ namespace ProjetoBaseComBanco
             {
                 Console.WriteLine(item.Nome);
                 Console.WriteLine(item.Pais);
+                Console.WriteLine("----------");
             }
 
-            int id = 20;
-
-            var teste = empresas.RetornarPorId(id);
+            empresas.ExcluirPorId(geralzao.FirstOrDefault().Id);
 
             Console.ReadLine();
         }
