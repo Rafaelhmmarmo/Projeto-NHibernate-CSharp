@@ -1,5 +1,6 @@
 ﻿using FluentNHibernate.Cfg;
 using NHibernate;
+using NHibernate.Tool.hbm2ddl;
 using System;
 using System.Reflection;
 using Configuration = NHibernate.Cfg.Configuration;
@@ -9,7 +10,26 @@ namespace ProjetoBaseComBanco.Conexao
     public class DataBase
     {
         private static ISessionFactory _sessionFactory;
-    
+
+        public static ISession GetSessionLocal()
+        {
+            return SessionFactory.OpenSession();
+        }
+
+        public static void GeraSchema()
+        {
+            Configuration cfg = 
+                RecuperaConfiguracao();
+
+            var config = 
+                RecuperaFluent(cfg);
+
+            config
+                .ExposeConfiguration(ass => new SchemaExport(ass)
+                .Create(true, true))
+                .BuildConfiguration();
+        }
+
         private static ISessionFactory SessionFactory
         {
             get
@@ -18,22 +38,9 @@ namespace ProjetoBaseComBanco.Conexao
                 {
                     if (_sessionFactory != null) return _sessionFactory;
 
-                    var cfg = new Configuration()
-                        .Configure();
+                    var cfg = RecuperaConfiguracao();
 
-                    if (_sessionFactory == null)
-                    {
-                        var config = Fluently.Configure(cfg);
-
-                        AddMappings(config, "ProjetoBaseComBanco");
-
-                        _sessionFactory = config
-                            /* .ExposeConfiguration(ass =>
-                             {
-                                 SchemaExport schemaExport = new SchemaExport(ass);
-                             })*/
-                            .BuildSessionFactory();
-                    }
+                    _sessionFactory = RecuperaFluent(cfg).BuildSessionFactory();
                 }
                 catch (Exception ex)
                 {
@@ -45,24 +52,32 @@ namespace ProjetoBaseComBanco.Conexao
             }
         }
 
-        private static void AddMappings(FluentConfiguration config, string assembly)
+        private static FluentConfiguration RecuperaFluent(Configuration cfg)
         {
+            var config = Fluently.Configure(cfg);
+
             try
             {
-                var map = Assembly.Load(assembly);
+                var map = Assembly.Load("ProjetoBaseComBanco");
 
                 if (map != null)
                     config.Mappings(m => m.FluentMappings.AddFromAssembly(map));
 
+                return config;
             }
-            catch
+            catch(Exception ex)
             {
+                throw ex;
             }
-        }
+        }      
 
-        public static ISession GetSessionLocal()
+        private static Configuration RecuperaConfiguracao()
         {
-            return SessionFactory.OpenSession();
-        }
+            Configuration cfg = new Configuration();
+            cfg.Configure();
+            cfg.AddAssembly(Assembly.GetExecutingAssembly());
+
+            return cfg;
+        }          
     }
 }
