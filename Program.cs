@@ -10,28 +10,28 @@ namespace ProjetoBaseComBanco
     {
         static void Main(string[] args)
         {
-            EmpresaRepository empresas = new EmpresaRepository();
-            EmpresasData NovaEmpresa = new EmpresasData();
+            //EmpresaRepository empresas = new EmpresaRepository();
+            //EmpresasData NovaEmpresa = new EmpresasData();
 
-            NovaEmpresa.Nome = "Itau";
-            NovaEmpresa.Pais = "Brasil";
-            NovaEmpresa.Ano = 1960;
-            NovaEmpresa.Balanco = 100;
+            //NovaEmpresa.Nome = "Itau";
+            //NovaEmpresa.Pais = "Brasil";
+            //NovaEmpresa.Ano = 1960;
+            //NovaEmpresa.Balanco = 100;
 
             DataBase.GeraSchema();
 
-            empresas.Gravar(NovaEmpresa);
+            //empresas.Gravar(NovaEmpresa);
           
-            var geralzao = empresas.RetornarTodas();
+            //var geralzao = empresas.RetornarTodas();
 
-            foreach(var item in geralzao)
-            {
-                Console.WriteLine(item.Nome);
-                Console.WriteLine(item.Pais);
-                Console.WriteLine("----------");
-            }
+            //foreach(var item in geralzao)
+            //{
+            //    Console.WriteLine(item.Nome);
+            //    Console.WriteLine(item.Pais);
+            //    Console.WriteLine("----------");
+            //}
 
-            empresas.ExcluirPorId(geralzao.FirstOrDefault().Id);
+            //empresas.ExcluirPorId(geralzao.FirstOrDefault().Id);
 
             Console.ReadLine();
         }

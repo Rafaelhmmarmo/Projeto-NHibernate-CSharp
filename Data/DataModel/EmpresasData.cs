@@ -1,9 +1,7 @@
 ﻿namespace ProjetoBaseComBanco.Data.DataModel
 {
-    public class EmpresasData
+    public class EmpresasData : DataModel
     {      
-        public virtual int Id { get; set; }
-
         public virtual string Nome { get; set; }
 
         public virtual string Pais { get; set; }
