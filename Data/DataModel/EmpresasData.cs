@@ -9,5 +9,7 @@
         public virtual string Pais { get; set; }
 
         public virtual int Ano { get; set; }
+
+        public virtual decimal Balanco { get; set; }
     }
 }

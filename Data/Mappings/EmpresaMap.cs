@@ -16,6 +16,7 @@ namespace ProjetoBaseComBanco.Data.Mappings
             Map(m => m.Nome, "NOME");
             Map(m => m.Pais, "PAIS");
             Map(m => m.Ano, "ANO");
+            Map(m => m.Balanco, "BALANCO");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ProjetoBaseComBanco.Data.DataModel;
+﻿using ProjetoBaseComBanco.Conexao;
+using ProjetoBaseComBanco.Data.DataModel;
 using ProjetoBaseComBanco.Data.Repositories;
 using System;
 using System.Linq;
@@ -12,16 +13,15 @@ namespace ProjetoBaseComBanco
             EmpresaRepository empresas = new EmpresaRepository();
             EmpresasData NovaEmpresa = new EmpresasData();
 
-            NovaEmpresa.Nome = "Mojang";
-            NovaEmpresa.Pais = "EUA";
-            NovaEmpresa.Ano = 2012;
+            NovaEmpresa.Nome = "Itau";
+            NovaEmpresa.Pais = "Brasil";
+            NovaEmpresa.Ano = 1960;
+            NovaEmpresa.Balanco = 100;
+
+            DataBase.GeraSchema();
 
             empresas.Gravar(NovaEmpresa);
-
-            //DataBase.GeraSchema();
-
-
-            
+          
             var geralzao = empresas.RetornarTodas();
 
             foreach(var item in geralzao)
